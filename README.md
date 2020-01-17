@@ -1,5 +1,4 @@
 ![](./assets/XCMetricsAggregator.png)
-# XCMetricsAggregator
 
 ## What's this?
 
