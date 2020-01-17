@@ -4,7 +4,7 @@ module XcMetricsAggregator
     APPLE_SCRIPT_EXECUTION = "osascript"
     APPLE_SCRIPT_FILE = "xcode_metrics_automation.applescript"
 
-  class Crowler
+  class Crawler
     def self.execute
         script_fullpath = File.join(ROOT_DIR, APPLE_SCRIPT_FILE)
         command ="#{APPLE_SCRIPT_EXECUTION} #{script_fullpath}"

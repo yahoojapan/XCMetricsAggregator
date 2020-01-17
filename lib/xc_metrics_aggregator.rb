@@ -1,6 +1,6 @@
 require "xc_metrics_aggregator/version"
 require 'xc_metrics_aggregator/product'
-require 'xc_metrics_aggregator/crowler'
+require 'xc_metrics_aggregator/crawler'
 require 'xc_metrics_aggregator/metrics/devices_service'
 require 'thor'
 
@@ -12,7 +12,7 @@ module XcMetricsAggregator
 
     desc "", ""
     def crowl
-      Crowler.execute()
+      Crawler.execute()
     end
 
     desc "", ""
