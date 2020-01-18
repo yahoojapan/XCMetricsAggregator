@@ -16,7 +16,16 @@ module XcMetricsAggregator::Metrics
 
         def initialize(json)
             @datasets = json["datasets"]
-            @unit = json["unit"]
+            @unit = Unit.new json["unit"]
+            @display_name = json["displayName"]
+            @identifier = json["identifier"]
+        end
+    end
+
+    class Unit
+        attr_accessor :display_name, :identifier
+
+        def initialize(json)
             @display_name = json["displayName"]
             @identifier = json["identifier"]
         end
@@ -29,8 +38,12 @@ module XcMetricsAggregator::Metrics
 
         def lookup
             categories.map do |category| 
-                [category.display_name, category.sections.map{ |s| s.display_name }.join("\n")] 
+                [category.display_name, category.sections.map{ |s| s.display_name }.join("\n"), category.sections.map{ |s| s.unit.display_name }.join("\n")] 
             end
+        end
+
+        def headings
+            ["category", "section", "unit"]
         end
 
         def categories

@@ -72,19 +72,19 @@ module XcMetricsAggregator
         product = ProductsService.new.target bundle_id
         begin
           product.open do |json| 
-            rows = XcMetricsAggregator::Metrics::CategoriesService.new(json).lookup
+            service = XcMetricsAggregator::Metrics::CategoriesService.new(json)
+            rows = service.lookup
             t =  Terminal::Table.new do |t|
+              t.headings = service.headings
               t.title = product.bundle_id
-              rows.each_with_index do |r, i|
+              rows.each do |r|
                 t << r
-                if i != rows.count - 1
-                  t << :separator
-                end
               end
             end
             puts "#{t}\n\n" 
           end
-        rescue 
+        rescue => e
+          puts e
         end
     end
 
