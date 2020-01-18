@@ -25,7 +25,7 @@ module XcMetricsAggregator
       @path = path
     end
 
-    def json
+    def open
       FileNotFoundException.new("File not Found: #{metrics_file}") unless has_metrics?
       return unless has_metrics?
       File.open(metrics_file) do |file|
@@ -34,11 +34,27 @@ module XcMetricsAggregator
     end
   end
 
-  class ProductsProvider
+  class ProductsService
     attr_reader :products
 
     def initialize
         @products = Dir.glob(PRODUCT_PATH + "/*").map { |dir_path| Product.new dir_path }     
+    end
+
+    def targets(bundle_ids=[])
+      if bundle_ids.empty?
+        products
+      else
+        products.select do |product|
+           bundle_ids.include? product.bundle_id.to_s
+        end
+      end
+    end
+
+    def each_product(bundle_ids=[])
+      targets(bundle_ids).each do |product|
+        yield product
+      end
     end
 
     def to_s

@@ -18,9 +18,7 @@ module XcMetricsAggregator::Metrics
             @is_represented = json["isRepresented"]
             @display_name = json["displayName"]
             @identifier = json["identifier"]
-            @devices = json["devices"].map do |json|
-                Device.new json
-            end
+            @devices = json["devices"].map { |json| Device.new json }
         end
     end
 
