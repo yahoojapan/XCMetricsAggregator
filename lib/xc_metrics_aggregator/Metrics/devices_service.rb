@@ -37,8 +37,12 @@ module XcMetricsAggregator::Metrics
 
         def lookup
             devicefamilies.map do |devicefamily| 
-                [devicefamily.display_name, devicefamily.devices.map{ |d| d.display_name }.join("\n")] 
+                [devicefamily.display_name, devicefamily.devices.map{ |d| d.display_name }.join("\n"), devicefamily.devices.map{ |d| d.identifier }.join("\n")] 
             end
+        end
+
+        def headings
+            ["kind", "device", "id"]
         end
 
         def get_device(identifier)

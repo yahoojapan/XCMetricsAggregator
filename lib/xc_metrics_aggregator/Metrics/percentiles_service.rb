@@ -22,5 +22,9 @@ module XcMetricsAggregator::Metrics
         def lookup
             percentiles.map { |percentile| [percentile.display_name, percentile.identifier] }
         end
+
+        def headings
+            ["percentile", "id"]
+        end
     end
 end

@@ -29,9 +29,11 @@ module XcMetricsAggregator
       ProductsService.new.each_product(bundle_ids || []) do |product|
         begin
           product.open do |json| 
-            rows = XcMetricsAggregator::Metrics::DevicesService.new(json).lookup
+            service = XcMetricsAggregator::Metrics::DevicesService.new(json)
+            rows = service.lookup
             t =  Terminal::Table.new do |t|
               t.title = product.bundle_id
+              t.headings = service.headings
               rows.each_with_index do |r, i|
                 t << r
                 if i != rows.count - 1
@@ -51,13 +53,14 @@ module XcMetricsAggregator
       ProductsService.new.each_product(bundle_ids || []) do |product|
         begin
           product.open do |json| 
-            rows = XcMetricsAggregator::Metrics::PercentilesService.new(json).lookup
+            service = XcMetricsAggregator::Metrics::PercentilesService.new(json)
+            rows = service.lookup
             t =  Terminal::Table.new do |t|
               t.title = product.bundle_id
+              t.headings = service.headings
               rows.each_with_index do |r, i|
                 t << r
                 if i != rows.count - 1
-                  t << :separator
                 end
               end
             end
@@ -96,9 +99,11 @@ module XcMetricsAggregator
       product = ProductsService.new.target bundle_id
       begin
         product.open do |json| 
-          rows = XcMetricsAggregator::Metrics::DevicesService.new(json).lookup
+          service = XcMetricsAggregator::Metrics::DevicesService.new(json)
+          rows = service.lookup
           t =  Terminal::Table.new do |t|
             t.title = "device"
+            t.headings = service.headings
             rows.each_with_index do |r, i|
               t << r
               if i != rows.count - 1
@@ -110,13 +115,14 @@ module XcMetricsAggregator
         end
 
         product.open do |json| 
-          rows = XcMetricsAggregator::Metrics::PercentilesService.new(json).lookup
+          service = XcMetricsAggregator::Metrics::PercentilesService.new(json)
+          rows = service.lookup
           t =  Terminal::Table.new do |t|
             t.title = "percentile"
+            t.headings = service.headings
             rows.each_with_index do |r, i|
               t << r
               if i != rows.count - 1
-                t << :separator
               end
             end
           end
