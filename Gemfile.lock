@@ -2,6 +2,7 @@ PATH
   remote: .
   specs:
     xc_metrics_aggregator (0.1.0)
+      ascii_charts
       etc
       terminal-table
       thor
@@ -9,6 +10,7 @@ PATH
 GEM
   remote: https://rubygems.org/
   specs:
+    ascii_charts (0.9.1)
     chronic_duration (0.10.6)
       numerizer (~> 0.1.1)
     etc (1.1.0)

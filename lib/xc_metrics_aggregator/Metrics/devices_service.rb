@@ -40,5 +40,13 @@ module XcMetricsAggregator::Metrics
                 [devicefamily.display_name, devicefamily.devices.map{ |d| d.display_name }.join("\n")] 
             end
         end
+
+        def get_device(identifier)
+            devicefamilies.select do |devicefamily| 
+                devicefamily.devices.select do |device|
+                    device.identifier == identifier
+                end
+            end.flatten.first
+        end
     end
 end

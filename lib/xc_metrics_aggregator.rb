@@ -5,6 +5,7 @@ require 'xc_metrics_aggregator/metrics/devices_service'
 require 'xc_metrics_aggregator/metrics/percentiles_service'
 require 'xc_metrics_aggregator/metrics/categories_service'
 require 'thor'
+require 'ascii_charts'
 
 module XcMetricsAggregator
   ROOT_DIR = File.expand_path("..", __dir__)
@@ -68,29 +69,89 @@ module XcMetricsAggregator
     end
 
     desc "", ""
-    def lookup(bundle_id)
-        product = ProductsService.new.target bundle_id
-        begin
-          product.open do |json| 
-            service = XcMetricsAggregator::Metrics::CategoriesService.new(json)
-            rows = service.lookup
-            t =  Terminal::Table.new do |t|
-              t.headings = service.headings
-              t.title = product.bundle_id
-              rows.each do |r|
-                t << r
-              end
+    def categories(bundle_id)
+      product = ProductsService.new.target bundle_id
+      begin
+        product.open do |json| 
+          service = XcMetricsAggregator::Metrics::CategoriesService.new(json)
+          rows = service.lookup
+          t =  Terminal::Table.new do |t|
+            t.headings = service.headings
+            t.title = product.bundle_id
+            rows.each do |r|
+              t << r
             end
-            puts "#{t}\n\n" 
           end
-        rescue => e
-          puts e
+          puts "#{t}\n\n" 
         end
+      rescue => e
+        puts e
+      end
     end
 
     desc "", ""
+    def lookup(bundle_id)
+      puts "\n\n######### #{bundle_id} ##########\n\n"
+
+      product = ProductsService.new.target bundle_id
+      begin
+        product.open do |json| 
+          rows = XcMetricsAggregator::Metrics::DevicesService.new(json).lookup
+          t =  Terminal::Table.new do |t|
+            t.title = "device"
+            rows.each_with_index do |r, i|
+              t << r
+              if i != rows.count - 1
+                t << :separator
+              end
+            end
+          end
+          puts "#{t}\n\n" 
+        end
+
+        product.open do |json| 
+          rows = XcMetricsAggregator::Metrics::PercentilesService.new(json).lookup
+          t =  Terminal::Table.new do |t|
+            t.title = "percentile"
+            rows.each_with_index do |r, i|
+              t << r
+              if i != rows.count - 1
+                t << :separator
+              end
+            end
+          end
+          puts "#{t}\n\n" 
+        end
+
+        product.open do |json| 
+          service = XcMetricsAggregator::Metrics::CategoriesService.new(json)
+          rows = service.lookup
+          t =  Terminal::Table.new do |t|
+            t.headings = service.headings
+            t.title = "category"
+            rows.each do |r|
+              t << r
+            end
+          end
+          puts "#{t}\n\n" 
+        end
+      rescue => e
+        puts e
+      end
+    end
+    
+    desc "", ""
     def metrics(category, bundle_id)
-      
+      product = ProductsService.new.target bundle_id
+      product.open do |json| 
+        service = XcMetricsAggregator::Metrics::CategoriesService.new(json)
+        datasets = service.formatted_datasets(category)
+        datasets.each do |dataset|
+          puts AsciiCharts::Cartesian.new(dataset[:chart_data], :bar => true, :hide_zero => true).draw
+          puts Terminal::Table.new rows: dataset[:meta]
+          puts "\n\n\n------\n\n\n"
+        end
+      end
     end
   end
 end
