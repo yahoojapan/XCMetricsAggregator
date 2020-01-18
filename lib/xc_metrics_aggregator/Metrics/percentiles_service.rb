@@ -19,10 +19,8 @@ module XcMetricsAggregator::Metrics
             percentiles_json.map { |percentile_json| Percentile.new percentile_json }
         end
 
-        def to_s
-            rows = percentiles.map { |percentile| [percentile.display_name, percentile.identifier] }
-            table = Terminal::Table.new :rows => rows
-            table.to_s
+        def lookup
+            percentiles.map { |percentile| [percentile.display_name, percentile.identifier] }
         end
     end
 end

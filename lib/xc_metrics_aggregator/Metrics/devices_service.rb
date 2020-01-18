@@ -35,12 +35,10 @@ module XcMetricsAggregator::Metrics
             end
         end
 
-        def to_s
-            rows = devicefamilies.map do |devicefamily| 
+        def lookup
+            devicefamilies.map do |devicefamily| 
                 [devicefamily.display_name, devicefamily.devices.map{ |d| d.display_name }.join("\n")] 
             end
-            table = Terminal::Table.new :rows => rows
-            table.to_s
         end
     end
 end

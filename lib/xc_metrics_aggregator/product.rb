@@ -51,6 +51,14 @@ module XcMetricsAggregator
       end
     end
 
+    def target(bundle_id)
+      if bundle_id.nil?
+        raise StandardError.new("needs bundle id")
+      end
+
+      products.select { |product| bundle_id == product.bundle_id.to_s }.first
+    end
+
     def each_product(bundle_ids=[])
       targets(bundle_ids).each do |product|
         yield product
