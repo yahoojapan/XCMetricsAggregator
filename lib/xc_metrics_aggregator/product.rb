@@ -14,7 +14,7 @@ module XcMetricsAggregator
     end
 
     def bundle_id
-        Pathname.new(@path).basename
+        Pathname.new(@path).basename.to_s
     end
 
     def has_metrics?
@@ -77,7 +77,7 @@ module XcMetricsAggregator
         rows << [product.bundle_id, status]
       end
 
-      table = Terminal::Table.new :headings => ['bundle id', 'status'], :rows => rows
+      table = Terminal::Table.new :headings => ['bundle id', 'status', 'raw data path'], :rows => rows
       table.to_s
     end
   end

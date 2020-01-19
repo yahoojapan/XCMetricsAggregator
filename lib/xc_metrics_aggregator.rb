@@ -6,6 +6,7 @@ require 'xc_metrics_aggregator/metrics/percentiles_service'
 require 'xc_metrics_aggregator/metrics/categories_service'
 require 'thor'
 require 'ascii_charts'
+require 'pp'
 
 module XcMetricsAggregator
   ROOT_DIR = File.expand_path("..", __dir__)
@@ -158,6 +159,55 @@ module XcMetricsAggregator
           puts "\n\n\n------\n\n\n"
         end
       end
+    end
+
+    option :device, require: true
+    option :percentile, require: true
+    desc "", ""
+    def latest(section)
+      deviceid = options[:device]
+      percentileid = options[:percentile]
+
+      product_service = ProductsService.new
+
+      target_datasets = {}
+      unit_label = ""
+      product_service.each_product do |product|
+        begin
+          product.open do |json| 
+            device = XcMetricsAggregator::Metrics::DevicesService.new(json).get_device deviceid
+            percentile = XcMetricsAggregator::Metrics::PercentilesService.new(json).get_percentile percentileid
+            category_service = XcMetricsAggregator::Metrics::CategoriesService.new(json) 
+            dataset = category_service.get_dataset section, device, percentile
+            unless dataset.nil? || dataset.points.empty?
+              unit_label = category_service.get_section(section).unit.display_name
+              target_datasets[product.bundle_id] = dataset
+            end
+          end
+        rescue
+        end
+      end
+
+      
+      chart_data = target_datasets.keys.each_with_index.reduce([]) do |sum, (bundle_id, idx)|
+        dataset = target_datasets[bundle_id]
+        if dataset.points.empty?
+          sum
+        else
+          latest_point = dataset.points.last
+          sum + [[idx, latest_point.summary]]
+        end
+      end
+
+      series = target_datasets.keys.each_with_index.map do |bundle_id, idx|
+        latest_point = target_datasets[bundle_id].points.last
+        [idx, bundle_id, latest_point.version]
+      end
+
+      puts "\n\n**** #{section} ****\n\n"
+      puts Terminal::Table.new rows: series, headings: ["Label", "Bundle ID", "Version"]
+      puts AsciiCharts::Cartesian.new(chart_data, bar: true, hide_zero: true).draw
+      puts "Unit: #{unit_label}\n\n"
     end
   end
 end

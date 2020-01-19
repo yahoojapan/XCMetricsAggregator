@@ -26,5 +26,11 @@ module XcMetricsAggregator::Metrics
         def headings
             ["percentile", "id"]
         end
+
+        def get_percentile(identifier)
+            percentiles.find do |percentile| 
+                percentile.identifier = identifier
+            end
+        end
     end
 end

@@ -39,6 +39,10 @@ module XcMetricsAggregator::Metrics
             @percentile = json["percentile"]
         end
 
+        def self.new_from_prop(device, percentile)
+            self.new({"device": device.identifier, "percentile": percentile.identifier})
+        end
+
         def ==(other)
             device == other.device && percentile == other.percentile
         end
@@ -83,15 +87,16 @@ module XcMetricsAggregator::Metrics
             @json["categories"].map { |json| Category.new json }
         end
 
-        def datasets(section_name)
+        def get_section(section_name)
             section = categories.map do |category|
-                category.sections.select do |section|
+                category.sections.find do |section|
                     section.display_name == section_name
                 end
-            end.flatten.first
-            p section.datasets
+            end.first
+        end
 
-            section.datasets
+        def datasets(section_name)
+            get_section(section_name).datasets
         end
 
         def formatted_datasets(section_name)
@@ -114,6 +119,15 @@ module XcMetricsAggregator::Metrics
                 outputs << {meta: [["device", device.display_name], ["percentile", dataset.filter_criteria.percentile]], chart_data: chart_data }
             end
             outputs
+        end
+
+
+        def get_dataset(section_name, device, percentile)
+            section = categories.map { |category| category.sections.find { |section| section.display_name == section_name } }.first
+            section.datasets.find do |dataset| 
+                dataset.filter_criteria.device == device.identifier \
+                && dataset.filter_criteria.percentile == percentile.identifier
+            end
         end
     end
 end 
