@@ -68,23 +68,32 @@ module XcMetricsAggregator::Metrics
     end
 
     class CategoriesService
-        def initialize(json)
+        attr_reader :device_service
+
+        def initialize(bundle_id, json)
             @json = json
-            @device_service = DevicesService.new json
+            @bundle_id = bundle_id
+            @device_service = DevicesService.new bundle_id, json
         end
 
-        def lookup
-            categories.map do |category| 
-                [category.display_name, category.sections.map{ |s| s.display_name }.join("\n"), category.sections.map{ |s| s.unit.display_name }.join("\n")] 
-            end
-        end
-
-        def headings
-            ["category", "section", "unit"]
+        def structure
+            structure = XcMetricsAggregator::TableStructure.new
+            structure.title = @bundle_id
+            structure.headings = headings
+            structure.rows = rows
+            structure
         end
 
         def categories
             @json["categories"].map { |json| Category.new json }
+        end
+
+        def get_dataset(section_name, device, percentile)
+            section = categories.map { |category| category.sections.find { |section| section.display_name == section_name } }.first
+            section.datasets.find do |dataset| 
+                dataset.filter_criteria.device == device.identifier \
+                && dataset.filter_criteria.percentile == percentile.identifier
+            end
         end
 
         def get_section(section_name)
@@ -94,40 +103,20 @@ module XcMetricsAggregator::Metrics
                 end
             end.first
         end
-
-        def datasets(section_name)
-            get_section(section_name).datasets
+                
+        private
+        def rows
+            categories.map do |category| 
+                [
+                    category.display_name, 
+                    category.sections.map{ |s| s.display_name }.join("\n"), 
+                    category.sections.map{ |s| s.unit.display_name }.join("\n")
+                ] 
+            end
         end
 
-        def formatted_datasets(section_name)
-            outputs = []
-            datasets(section_name).each do |dataset|
-                chart_data = dataset.points.map { |point| [point.version, point.summary] }
-
-                device = @device_service.get_device dataset.filter_criteria.device
-                outputs << {meta: [["device", device.display_name], ["percentile", dataset.filter_criteria.percentile]], chart_data: chart_data }
-            end
-            outputs
-        end
-
-        def formatted_datasets(section_name)
-            outputs = []
-            datasets(section_name).each do |dataset|
-                chart_data = dataset.points.map { |point| [point.version, point.summary] }
-
-                device = @device_service.get_device dataset.filter_criteria.device
-                outputs << {meta: [["device", device.display_name], ["percentile", dataset.filter_criteria.percentile]], chart_data: chart_data }
-            end
-            outputs
-        end
-
-
-        def get_dataset(section_name, device, percentile)
-            section = categories.map { |category| category.sections.find { |section| section.display_name == section_name } }.first
-            section.datasets.find do |dataset| 
-                dataset.filter_criteria.device == device.identifier \
-                && dataset.filter_criteria.percentile == percentile.identifier
-            end
+        def headings
+            ["category", "section", "unit"]
         end
     end
 end 

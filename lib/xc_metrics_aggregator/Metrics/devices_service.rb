@@ -24,8 +24,9 @@ module XcMetricsAggregator::Metrics
 
 
     class DevicesService
-        def initialize(json)
+        def initialize(bundle_id, json)
             @json = json
+            @bundle_id = bundle_id
         end
         
         def devicefamilies
@@ -35,14 +36,12 @@ module XcMetricsAggregator::Metrics
             end
         end
 
-        def lookup
-            devicefamilies.map do |devicefamily| 
-                [devicefamily.display_name, devicefamily.devices.map{ |d| d.display_name }.join("\n"), devicefamily.devices.map{ |d| d.identifier }.join("\n")] 
-            end
-        end
-
-        def headings
-            ["kind", "device", "id"]
+        def structure
+            structure = XcMetricsAggregator::TableStructure.new
+            structure.title = @bundle_id
+            structure.headings = headings()
+            structure.rows = rows()
+            structure
         end
 
         def get_device(identifier)
@@ -51,6 +50,26 @@ module XcMetricsAggregator::Metrics
                     device.identifier == identifier
                 end
             end.flatten.first
+        end
+
+        private
+        def rows
+            rows = []
+            devicefamilies.each_with_index do |devicefamily, idx| 
+                device_display_names = devicefamily.devices.map{ |d| d.display_name }.join("\n")
+                device_identifiers = devicefamily.devices.map{ |d| d.identifier }.join("\n")
+                row = [devicefamily.display_name, device_display_names, device_identifiers]
+                rows += if idx == devicefamilies.count - 1
+                    [row]
+                else
+                    [row] + [:separator]
+                end
+            end
+            return rows
+        end
+
+        def headings
+            ["kind", "device", "id"]
         end
     end
 end

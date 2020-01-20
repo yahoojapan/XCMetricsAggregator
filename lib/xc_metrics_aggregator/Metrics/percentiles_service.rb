@@ -10,16 +10,25 @@ module XcMetricsAggregator::Metrics
     end
 
     class PercentilesService
-        def initialize(json)
+        def initialize(bundle_id, json)
             @json = json
+            @bundle_id = bundle_id
         end
         
         def percentiles
             percentiles_json = @json["filterCriteriaSets"]["percentiles"]
             percentiles_json.map { |percentile_json| Percentile.new percentile_json }
         end
-
-        def lookup
+        
+        def structure
+            structure = XcMetricsAggregator::TableStructure.new
+            structure.title = @bundle_id
+            structure.headings = headings()
+            structure.rows = rows()
+            structure
+        end
+        
+        def rows
             percentiles.map { |percentile| [percentile.display_name, percentile.identifier] }
         end
 
