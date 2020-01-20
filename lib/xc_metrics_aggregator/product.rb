@@ -27,6 +27,13 @@ module XcMetricsAggregator
 
     def open
       FileNotFoundException.new("File not Found: #{metrics_file}") unless has_metrics?
+      File.open(metrics_file) do |file|
+        yield JSON.load(file, symbolize_names: true)
+      end
+    end
+
+
+    def try_to_open
       return unless has_metrics?
       File.open(metrics_file) do |file|
         yield JSON.load(file, symbolize_names: true)

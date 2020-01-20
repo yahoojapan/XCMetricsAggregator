@@ -1,25 +1,23 @@
+require 'xc_metrics_aggregator/structure/structure'
+
 module XcMetricsAggregator::Metrics
     class LatestService
 
         def initialize(section, deviceid, percentileid)
-            product_service = XcMetricsAggregator::ProductsService.new
-
             target_datasets = {}
             unit_label = ""
-            product_service.each_product do |product|
-              begin
-                product.open do |json| 
-                  device = XcMetricsAggregator::Metrics::DevicesService.new(product.bundle_id, json).get_device deviceid
-                  percentile = XcMetricsAggregator::Metrics::PercentilesService.new(product.bundle_id, json).get_percentile percentileid
-                  category_service = XcMetricsAggregator::Metrics::CategoriesService.new(product.bundle_id, json) 
-                  dataset = category_service.get_dataset section, device, percentile
-                  unless dataset.nil? || dataset.points.empty?
-                    unit_label = category_service.get_section(section).unit.display_name
-                    target_datasets[product.bundle_id] = dataset
-                  end
+            XcMetricsAggregator::ProductsService.new.each_product do |product|
+                product.try_to_open do |json| 
+                    device = XcMetricsAggregator::Metrics::DevicesService.new(product.bundle_id, json).get_device deviceid
+                    percentile = XcMetricsAggregator::Metrics::PercentilesService.new(product.bundle_id, json).get_percentile percentileid
+                    category_service = XcMetricsAggregator::Metrics::CategoriesService.new(product.bundle_id, json) 
+                    
+                    dataset = category_service.get_dataset section, device, percentile
+                    unless dataset.nil? || dataset.points.empty?
+                      unit_label = category_service.get_section(section).unit.display_name
+                      target_datasets[product.bundle_id] = dataset
+                    end
                 end
-              rescue
-              end
             end
             
             @unit_labe = unit_label

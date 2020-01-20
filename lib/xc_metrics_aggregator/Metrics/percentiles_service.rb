@@ -1,3 +1,5 @@
+require 'xc_metrics_aggregator/structure/structure'
+
 module XcMetricsAggregator::Metrics
     class Percentile
         attr_accessor :display_name, :is_represented, :identifier

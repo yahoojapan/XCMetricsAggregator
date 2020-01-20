@@ -1,4 +1,5 @@
 require 'xc_metrics_aggregator/metrics/categories_service'
+require 'xc_metrics_aggregator/structure/structure'
 
 module XcMetricsAggregator::Metrics
     class MetricsService

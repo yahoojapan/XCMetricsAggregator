@@ -1,4 +1,4 @@
-require 'terminal-table'
+require 'xc_metrics_aggregator/structure/structure'
 
 module XcMetricsAggregator::Metrics
     class Category

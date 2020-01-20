@@ -1,4 +1,5 @@
 require 'terminal-table'
+require 'xc_metrics_aggregator/structure/structure'
 
 module XcMetricsAggregator
     class Formatter
@@ -57,20 +58,5 @@ module XcMetricsAggregator
             output += "\n"
             output += "Unit: #{data.unit}\n\n"
         end
-    end
-
-
-    class Structure
-        def format(formatter)
-            formatter.format(self)
-        end
-    end
-
-    class TableStructure < Structure
-        attr_accessor :title, :headings, :rows
-    end
-
-    class ChartStructure < Structure
-        attr_accessor :series, :samples, :unit
     end
 end

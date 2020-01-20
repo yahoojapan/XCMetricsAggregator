@@ -32,14 +32,13 @@ module XcMetricsAggregator
     option :format
     desc "", ""
     def devices
-      format_type = XcMetricsAggregator::Formatter.get_formatter(options[:format])
       ProductsService.new.each_product(options[:bundle_ids] || []) do |product|
-        begin
-          product.open do |json| 
-            service = XcMetricsAggregator::Metrics::DevicesService.new(product.bundle_id, json)
-            puts service.structure.format format_type
-          end
-        rescue
+        product.try_to_open do |json| 
+          puts XcMetricsAggregator::Metrics::DevicesService
+            .new(product.bundle_id, json)
+            .structure
+            .format XcMetricsAggregator::Formatter.get_formatter(options[:format])
+          puts "\n\n"
         end
       end
     end
@@ -48,14 +47,13 @@ module XcMetricsAggregator
     option :format
     desc "", ""
     def percentiles
-      format_type = XcMetricsAggregator::Formatter.get_formatter(options[:format])
       ProductsService.new.each_product(options[:bundle_ids] || []) do |product|
-        begin
-          product.open do |json| 
-            service = XcMetricsAggregator::Metrics::PercentilesService.new(product.bundle_id, json)
-            puts service.structure.format format_type
-          end
-        rescue
+        product.try_to_open do |json| 
+          puts XcMetricsAggregator::Metrics::PercentilesService
+            .new(product.bundle_id, json)
+            .structure
+            .format XcMetricsAggregator::Formatter.get_formatter(options[:format])
+          puts "\n\n"
         end
       end
     end
@@ -65,15 +63,12 @@ module XcMetricsAggregator
     option :format
     desc "", ""
     def categories
-      format_type = XcMetricsAggregator::Formatter.get_formatter(options[:format])
       product = ProductsService.new.target options[:bundle_id]
-      begin
-        product.open do |json| 
-          service = XcMetricsAggregator::Metrics::CategoriesService.new(product.bundle_id, json)
-          puts service.structure.format format_type
-        end
-      rescue => e
-        puts e.backtrace
+      product.try_to_open do |json|
+        puts XcMetricsAggregator::Metrics::CategoriesService
+          .new(product.bundle_id, json)
+          .structure
+          .format XcMetricsAggregator::Formatter.get_formatter(options[:format])
       end
     end
     
@@ -81,14 +76,14 @@ module XcMetricsAggregator
     option :section, require: true
     desc "", ""
     def metrics
-      format_type = XcMetricsAggregator::Formatter.get_formatter(options[:format])
       product = ProductsService.new.target options[:bundle_id]
-      product.open do |json| 
-        service = XcMetricsAggregator::Metrics::MetricsService.new(product.bundle_id, json)
-        service.structures(options[:section]).each do |structure|
-          puts structure.format format_type
-          puts "------\n\n"
-        end
+      product.try_to_open do |json| 
+        XcMetricsAggregator::Metrics::MetricsService
+          .new(product.bundle_id, json).structures(options[:section])
+          .each do |structure|
+            puts structure.format XcMetricsAggregator::Formatter.get_formatter(options[:format])
+            puts "------\n\n"
+          end
       end
     end
 
@@ -101,10 +96,11 @@ module XcMetricsAggregator
       deviceid = options[:device]
       percentileid = options[:percentile]
       section = options[:section]
-      format_type = Formatter.get_formatter(options[:format])
 
-      latest_service = XcMetricsAggregator::Metrics::LatestService.new section, deviceid, percentileid
-      puts latest_service.structure.format format_type
+      puts XcMetricsAggregator::Metrics::LatestService
+        .new(section, deviceid, percentileid)
+        .structure
+        .format Formatter.get_formatter(options[:format])
     end
   end
 end
