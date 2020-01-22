@@ -33,7 +33,7 @@ module XcMetricsAggregator
     option :format
     desc "", ""
     def devices
-      ProductsService.new.each_product(options[:bundle_ids] || []) do |product|
+      ProductsService.new.each_product(options[:bundle_ids].split(",") || []) do |product|
         product.try_to_open do |json| 
           puts Metrics::DevicesService
             .new(product.bundle_id, json)

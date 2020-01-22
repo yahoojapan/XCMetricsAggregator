@@ -15,12 +15,38 @@ XCMetricsAggregator aggregates metrics across all apps from [Xcode Metrics Organ
 git clone https://github.com/yahoojapan/XCMetricsAggregator.git
 ```
 
-## Run
+## Getting Started
 
-Run `run.sh` from the Terminal.
+### Downloading metrics data 
 ```
-./run.sh
+bundle exec exe/xcmagg crowl
 ```
+
+### application lookup in metrics data
+```
+bundle exec exe/xcmagg latest --device iPhone11,6 --percentile com.apple.dt.metrics.percentile.ninetyFive --section launchTime
+```
+
+### available devices for your apps
+```
+bundle exec exe/xcmagg devices --bundle_ids yourapp1,yourapp2
+```
+
+### available percentiles for your apps
+```
+bundle exec exe/xcmagg percentiles --bundle_ids yourapp1,yourapp2
+```
+
+### launch time metrics for an app
+```
+bundle exec exe/xcmagg metrics --section launchTime --bundle_ids yourapp1 
+```
+
+### Compare launch times between your apps
+```
+bundle exec exe/xcmagg latest --section launchTime --device iPhone11,6 --percentile com.apple.dt.metrics.percentile.ninetyFive
+```
+
 
 ## Run with Launchd
 
