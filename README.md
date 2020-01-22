@@ -24,7 +24,7 @@ bundle exec exe/xcmagg crowl
 
 ### application lookup in metrics data
 ```
-bundle exec exe/xcmagg latest --device iPhone11,6 --percentile com.apple.dt.metrics.percentile.ninetyFive --section launchTime
+bundle exec exe/xcmagg apps
 ```
 
 ### available devices for your apps
