@@ -1,6 +1,62 @@
 require 'xc_metrics_aggregator/structure/structure'
 
 module XcMetricsAggregator::Metrics
+    class CategoriesService
+        attr_reader :device_service
+
+        def initialize(bundle_id, json)
+            @json = json
+            @bundle_id = bundle_id
+            @device_service = DevicesService.new bundle_id, json
+        end
+
+        def structure
+            structure = XcMetricsAggregator::TableStructure.new
+            structure.title = @bundle_id
+            structure.headings = headings
+            structure.rows = rows
+            structure
+        end
+
+        def categories
+            @json["categories"].map { |json| Category.new json }
+        end
+
+        def get_dataset(section_name, device, percentile)
+            section = categories.map { |category| category.sections.find { |section| section.display_name == section_name } }.first
+            section.datasets.find do |dataset| 
+                dataset.filter_criteria.device == device.identifier \
+                && dataset.filter_criteria.percentile == percentile.identifier
+            end
+        end
+
+        def get_section(section_name)
+            section = categories.map do |category|
+                category.sections.find do |section|
+                    section.display_name == section_name
+                end
+            end.first
+        end
+                
+        private
+        def rows
+            categories.map do |category| 
+                [
+                    category.display_name, 
+                    category.sections.map{ |s| s.display_name }.join("\n"), 
+                    category.sections.map{ |s| s.unit.display_name }.join("\n")
+                ] 
+            end
+        end
+
+        def headings
+            ["category", "section", "unit"]
+        end
+    end
+end 
+
+
+module XcMetricsAggregator::Metrics
     class Category
         attr_accessor :sections, :display_name, :identifier
 
@@ -66,57 +122,4 @@ module XcMetricsAggregator::Metrics
             @filter_criteria = FilterCriteria.new json["filterCriteria"]
         end
     end
-
-    class CategoriesService
-        attr_reader :device_service
-
-        def initialize(bundle_id, json)
-            @json = json
-            @bundle_id = bundle_id
-            @device_service = DevicesService.new bundle_id, json
-        end
-
-        def structure
-            structure = XcMetricsAggregator::TableStructure.new
-            structure.title = @bundle_id
-            structure.headings = headings
-            structure.rows = rows
-            structure
-        end
-
-        def categories
-            @json["categories"].map { |json| Category.new json }
-        end
-
-        def get_dataset(section_name, device, percentile)
-            section = categories.map { |category| category.sections.find { |section| section.display_name == section_name } }.first
-            section.datasets.find do |dataset| 
-                dataset.filter_criteria.device == device.identifier \
-                && dataset.filter_criteria.percentile == percentile.identifier
-            end
-        end
-
-        def get_section(section_name)
-            section = categories.map do |category|
-                category.sections.find do |section|
-                    section.display_name == section_name
-                end
-            end.first
-        end
-                
-        private
-        def rows
-            categories.map do |category| 
-                [
-                    category.display_name, 
-                    category.sections.map{ |s| s.display_name }.join("\n"), 
-                    category.sections.map{ |s| s.unit.display_name }.join("\n")
-                ] 
-            end
-        end
-
-        def headings
-            ["category", "section", "unit"]
-        end
-    end
-end 
+end

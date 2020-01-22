@@ -1,15 +1,17 @@
 require 'terminal-table'
 require 'xc_metrics_aggregator/structure/structure'
+require 'xc_metrics_aggregator/formatter/output_format'
+
 
 module XcMetricsAggregator
     class Formatter
-        def self.get_formatter(option)
-            case option
-            when "csv"
+        def self.get_formatter(format)
+            case format
+            when OutputFormat::CSV
                 CSVFormatter.new
-            when "html"
+            when OutputFormat::HTML
                 HTMLFormatter.new
-            when "ascii", nil
+            when OutputFormat::ASCII, nil
                 ASCIIFormatter.new
             end
         end
@@ -43,12 +45,13 @@ module XcMetricsAggregator
         end
 
         def format_chart(data)
+            
         end
     end
 
     class ASCIIFormatter < Formatter
         def format_table(data)
-            Terminal::Table.new rows: data.rows, heading: data.headings, title: data.title
+            Terminal::Table.new rows: data.rows, headings: data.headings, title: data.title
         end
 
         def format_chart(data)

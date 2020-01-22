@@ -7,6 +7,7 @@ require 'xc_metrics_aggregator/metrics/categories_service'
 require 'xc_metrics_aggregator/metrics/metrics_service'
 require 'xc_metrics_aggregator/metrics/latest_service'
 require 'xc_metrics_aggregator/formatter/formatter'
+require 'xc_metrics_aggregator/formatter/output_format'
 require 'thor'
 require 'ascii_charts'
 require 'pp'
@@ -34,10 +35,10 @@ module XcMetricsAggregator
     def devices
       ProductsService.new.each_product(options[:bundle_ids] || []) do |product|
         product.try_to_open do |json| 
-          puts XcMetricsAggregator::Metrics::DevicesService
+          puts Metrics::DevicesService
             .new(product.bundle_id, json)
             .structure
-            .format XcMetricsAggregator::Formatter.get_formatter(options[:format])
+            .format Formatter.get_formatter(format)
           puts "\n\n"
         end
       end
@@ -49,10 +50,10 @@ module XcMetricsAggregator
     def percentiles
       ProductsService.new.each_product(options[:bundle_ids] || []) do |product|
         product.try_to_open do |json| 
-          puts XcMetricsAggregator::Metrics::PercentilesService
+          puts Metrics::PercentilesService
             .new(product.bundle_id, json)
             .structure
-            .format XcMetricsAggregator::Formatter.get_formatter(options[:format])
+            .format Formatter.get_formatter(format)
           puts "\n\n"
         end
       end
@@ -65,23 +66,24 @@ module XcMetricsAggregator
     def categories
       product = ProductsService.new.target options[:bundle_id]
       product.try_to_open do |json|
-        puts XcMetricsAggregator::Metrics::CategoriesService
+        puts Metrics::CategoriesService
           .new(product.bundle_id, json)
           .structure
-          .format XcMetricsAggregator::Formatter.get_formatter(options[:format])
+          .format Formatter.get_formatter(format)
       end
     end
     
     option :bundle_id, require: true
     option :section, require: true
+    option :format
     desc "", ""
     def metrics
       product = ProductsService.new.target options[:bundle_id]
       product.try_to_open do |json| 
-        XcMetricsAggregator::Metrics::MetricsService
+        Metrics::MetricsService
           .new(product.bundle_id, json).structures(options[:section])
           .each do |structure|
-            puts structure.format XcMetricsAggregator::Formatter.get_formatter(options[:format])
+            puts structure.format Formatter.get_formatter(format)
             puts "------\n\n"
           end
       end
@@ -97,10 +99,15 @@ module XcMetricsAggregator
       percentileid = options[:percentile]
       section = options[:section]
 
-      puts XcMetricsAggregator::Metrics::LatestService
+      puts Metrics::LatestService
         .new(section, deviceid, percentileid)
         .structure
-        .format Formatter.get_formatter(options[:format])
+        .format Formatter.get_formatter(format)
+    end
+
+    private 
+    def format()
+      OutputFormat.all.find { |v| options[:format] }
     end
   end
 end
