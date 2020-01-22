@@ -39,7 +39,7 @@ bundle exec exe/xcmagg percentiles --bundle_ids yourapp1,yourapp2
 
 ### launch time metrics for an app
 ```
-bundle exec exe/xcmagg metrics --section launchTime --bundle_ids yourapp1 
+bundle exec exe/xcmagg metrics --section launchTime --bundle_id yourapp1 
 ```
 
 ### Compare launch times between your apps
