@@ -47,6 +47,15 @@ bundle exec exe/xcmagg metrics --section launchTime --bundle_ids yourapp1
 bundle exec exe/xcmagg latest --section launchTime --device iPhone11,6 --percentile com.apple.dt.metrics.percentile.ninetyFive
 ```
 
+### Send the metrics to your log server with CSV format
+```
+bundle exec exe/xcmagg latest --section launchTime --device iPhone11,6 --percentile com.apple.dt.metrics.percentile.ninetyFive --format csv
+```
+
+### Show the metrics on your in-house tool with HTML format
+```
+bundle exec exe/xcmagg latest --section launchTime --device iPhone11,6 --percentile com.apple.dt.metrics.percentile.ninetyFive --format html
+```
 
 ## Run with Launchd
 
