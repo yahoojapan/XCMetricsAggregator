@@ -33,7 +33,11 @@ module XcMetricsAggregator
     option :format
     desc "", ""
     def devices
-      ProductsService.new.each_product(options[:bundle_ids].split(",") || []) do |product|
+      bundle_ids = []
+      if !options[:bundle_ids].nil?
+        bundle_ids = options[:bundle_ids].split(",")
+      end
+      ProductsService.new.each_product(bundle_ids) do |product|
         product.try_to_open do |json| 
           puts Metrics::DevicesService
             .new(product.bundle_id, json)
@@ -48,7 +52,11 @@ module XcMetricsAggregator
     option :format
     desc "", ""
     def percentiles
-      ProductsService.new.each_product(options[:bundle_ids] || []) do |product|
+      bundle_ids = []
+      if !options[:bundle_ids].nil?
+        bundle_ids = options[:bundle_ids].split(",")
+      end
+      ProductsService.new.each_product(bundle_ids) do |product|
         product.try_to_open do |json| 
           puts Metrics::PercentilesService
             .new(product.bundle_id, json)
