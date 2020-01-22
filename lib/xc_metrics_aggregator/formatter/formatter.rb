@@ -31,9 +31,10 @@ module XcMetricsAggregator
         def format_chart(data)
         end
     end
-    
+
     class CSVFormatter < Formatter
         def format_table(data)
+          
         end
 
         def format_chart(data)
@@ -45,7 +46,7 @@ module XcMetricsAggregator
         end
 
         def format_chart(data)
-            
+
         end
     end
 
