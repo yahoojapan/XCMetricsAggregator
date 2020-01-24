@@ -1,5 +1,5 @@
 require 'xc_metrics_aggregator/structure/structure'
-require 'pp'
+
 module XcMetricsAggregator::Metrics
     class CategoriesService
         attr_reader :device_service

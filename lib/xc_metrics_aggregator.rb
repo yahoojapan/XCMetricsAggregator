@@ -93,7 +93,7 @@ module XcMetricsAggregator
     option :device, :aliases => "-d", type: :string
     option :percentile, :aliases => "-p", type: :string
     option :format, :aliases => "-f", type: :string, default: "ascii"
-    desc "latest -p <percentile> -s <section> -d <device> [-f <format>]", "Compare a latest version's metrics between available builde ids"
+    desc "latest -s <section> [-p <percentile id>] [-d <device id>] [-f <format>]", "Compare a latest version's metrics between available builde ids"
     def latest
       deviceid = options[:device]
       percentileid = options[:percentile]
