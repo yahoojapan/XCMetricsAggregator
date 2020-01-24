@@ -39,6 +39,10 @@ module XcMetricsAggregator::Metrics
         end
 
         def get_percentile(identifier)
+            if identifier.nil?
+                nil
+            end
+
             percentiles.find do |percentile| 
                 percentile.identifier = identifier
             end

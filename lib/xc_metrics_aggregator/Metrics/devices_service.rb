@@ -45,11 +45,17 @@ module XcMetricsAggregator::Metrics
         end
 
         def get_device(identifier)
-            devicefamilies.select do |devicefamily| 
+            if identifier.nil?
+                nil
+            end
+
+            device = devicefamilies.map do |devicefamily| 
                 devicefamily.devices.select do |device|
                     device.identifier == identifier
                 end
             end.flatten.first
+
+            device
         end
 
         private

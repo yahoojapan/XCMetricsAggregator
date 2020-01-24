@@ -72,7 +72,25 @@ module XcMetricsAggregator
       end
     end
 
-    def to_s
+    def structure(available_path)
+      structure = XcMetricsAggregator::TableStructure.new
+      structure.title = @bundle_id
+      structure.headings = headings(available_path)
+      structure.rows = rows(available_path)
+      structure
+    end
+
+    private
+    def headings(available_path)
+      if available_path
+        ['bundle id', 'status', 'raw data path']
+      else 
+        ['bundle id', 'status']
+      end
+      
+    end
+
+    def rows(available_path)
       rows = []
       products.each do |product|
         status = 
@@ -81,11 +99,13 @@ module XcMetricsAggregator
           else
             "fail to get metrics"
           end
-        rows << [product.bundle_id, status]
+        if available_path
+          rows << [product.bundle_id, status, product.metrics_file.to_s]
+        else 
+          rows << [product.bundle_id, status]
+        end
       end
-
-      table = Terminal::Table.new :headings => ['bundle id', 'status', 'raw data path'], :rows => rows
-      table.to_s
+      return rows
     end
   end
 end

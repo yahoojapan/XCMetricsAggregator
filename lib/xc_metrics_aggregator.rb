@@ -18,26 +18,24 @@ module XcMetricsAggregator
   class Error < StandardError; end
   class CLI < Thor
 
-    desc "", ""
+    desc "crowl", "Aggregate raw data of Xcode Organizer Metrics"
     def crowl
       Crawler.execute()
     end
 
-    desc "", ""
+    desc "apps", "Shows available bundle ids on Xcode Organizer Metrics"
+    option :available_path, type: :boolean, aliases: "-a", default: false
+    option :format, aliases: "-f", type: :string, default: "ascii"
     def apps
-      service = ProductsService.new
-      puts service
+      service = ProductsService.new 
+      puts service.structure(options[:available_path]).format Formatter.get_formatter(format)
     end
 
-    option :bundle_ids
-    option :format
-    desc "", ""
+    option :bundle_ids, :aliases => "-b", type: :array, default: []
+    option :format, :aliases => "-f", type: :string, default: "ascii"
+    desc "devices [-b <bundle id 1> <bundle id 2> ...] [-f <format>]", "Show available devices by builde id"
     def devices
-      bundle_ids = []
-      if !options[:bundle_ids].nil?
-        bundle_ids = options[:bundle_ids].split(",")
-      end
-      ProductsService.new.each_product(bundle_ids) do |product|
+      each_product do |product|
         product.try_to_open do |json| 
           puts Metrics::DevicesService
             .new(product.bundle_id, json)
@@ -48,15 +46,11 @@ module XcMetricsAggregator
       end
     end
 
-    option :bundle_ids
-    option :format
-    desc "", ""
+    option :bundle_ids, :aliases => "-b", type: :array, default: []
+    option :format, :aliases => "-f", type: :string, default: "ascii"
+    desc "percentiles [-b <bundle id>,...] [-f <format>]", "Show available percentiles by builde id"
     def percentiles
-      bundle_ids = []
-      if !options[:bundle_ids].nil?
-        bundle_ids = options[:bundle_ids].split(",")
-      end
-      ProductsService.new.each_product(bundle_ids) do |product|
+      each_product do |product|
         product.try_to_open do |json| 
           puts Metrics::PercentilesService
             .new(product.bundle_id, json)
@@ -68,11 +62,10 @@ module XcMetricsAggregator
     end
 
     
-    option :bundle_id, require: true
-    option :format
-    desc "", ""
-    def categories
-      product = ProductsService.new.target options[:bundle_id]
+    option :bundle_id, :aliases => "-b", require: true
+    option :format, :aliases => "-f", type: :string, default: "ascii"
+    desc "categories -b <bundle id> [-f <format>]", "Show available categories by builde id"
+    def sections
       product.try_to_open do |json|
         puts Metrics::CategoriesService
           .new(product.bundle_id, json)
@@ -81,12 +74,11 @@ module XcMetricsAggregator
       end
     end
     
-    option :bundle_id, require: true
-    option :section, require: true
-    option :format
-    desc "", ""
+    option :section, :aliases => "-s", require: true
+    option :bundle_id, :aliases => "-b", require: true
+    option :format, :aliases => "-f", type: :string, default: "ascii"
+    desc "metrics -b <bundle id> -s <section> [-f <format>]", "Show metrics data to a builde id"
     def metrics
-      product = ProductsService.new.target options[:bundle_id]
       product.try_to_open do |json| 
         Metrics::MetricsService
           .new(product.bundle_id, json).structures(options[:section])
@@ -97,11 +89,11 @@ module XcMetricsAggregator
       end
     end
 
-    option :device, require: true
-    option :percentile, require: true
-    option :section, require: true
-    option :format
-    desc "", ""
+    option :section, :aliases => "-s", require: true
+    option :device, :aliases => "-d", type: :string
+    option :percentile, :aliases => "-p", type: :string
+    option :format, :aliases => "-f", type: :string, default: "ascii"
+    desc "latest -p <percentile> -s <section> -d <device> [-f <format>]", "Compare a latest version's metrics between available builde ids"
     def latest
       deviceid = options[:device]
       percentileid = options[:percentile]
@@ -114,8 +106,18 @@ module XcMetricsAggregator
     end
 
     private 
-    def format()
-      OutputFormat.all.find { |v| options[:format] }
+    def format
+      OutputFormat.all.find { |v| v == options[:format] }
+    end
+
+    def each_product
+      ProductsService.new.each_product(options[:bundle_ids]) { |product|
+        yield product
+      }
+    end
+
+    def product
+      ProductsService.new.target options[:bundle_id]
     end
   end
 end

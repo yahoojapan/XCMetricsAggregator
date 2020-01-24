@@ -11,7 +11,7 @@ module XcMetricsAggregator
                 CSVFormatter.new
             when OutputFormat::HTML
                 HTMLFormatter.new
-            when OutputFormat::ASCII, nil
+            when OutputFormat::ASCII
                 ASCIIFormatter.new
             end
         end

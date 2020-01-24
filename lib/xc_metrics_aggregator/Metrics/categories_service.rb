@@ -1,5 +1,5 @@
 require 'xc_metrics_aggregator/structure/structure'
-
+require 'pp'
 module XcMetricsAggregator::Metrics
     class CategoriesService
         attr_reader :device_service
@@ -30,12 +30,32 @@ module XcMetricsAggregator::Metrics
             end
         end
 
-        def get_section(section_name)
-            section = categories.map do |category|
-                category.sections.find do |section|
+
+        def get_available_dataset(section_name, device, percentile)
+            section = categories.map { |category| 
+                category.sections.find { |section| 
                     section.display_name == section_name
-                end
-            end.first
+                }
+            }.flatten.compact.first
+            if section.nil?
+                return nil
+            end
+
+            datasets = section.datasets.select do |dataset| 
+                available_device = device ? dataset.filter_criteria.device == device.identifier : true
+                available_percentile = percentile ? dataset.filter_criteria.percentile == percentile.identifier : true
+                available_device && available_percentile && !dataset.points.empty?
+            end.last
+            datasets
+        end
+
+        def get_section(section_name)
+            section = categories.map { |category| 
+                category.sections.find { |section| 
+                    section.display_name == section_name
+                }
+            }.flatten.compact.first
+            section
         end
                 
         private

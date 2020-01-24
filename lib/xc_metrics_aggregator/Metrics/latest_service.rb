@@ -9,7 +9,12 @@ module XcMetricsAggregator::Metrics
                 product.try_to_open do |json| 
                     device = get_device(product, json, deviceid)
                     percentile = get_percentile(product, json, percentileid)
-                    dataset = get_dataset(product, json, section, device, percentile)
+                    
+                    if device && percentile
+                        dataset = get_dataset(product, json, section, device, percentile)
+                    else
+                        dataset = get_available_dataset(product, json, section, device, percentile)
+                    end
 
                     unless dataset.nil? || dataset.points.empty?
                       unit_label = get_unit_label(product, json, section)
@@ -17,7 +22,6 @@ module XcMetricsAggregator::Metrics
                     end
                 end
             end
-            
             @unit_label = unit_label
             @target_datasets = target_datasets
         end
@@ -74,6 +78,10 @@ module XcMetricsAggregator::Metrics
 
         def get_dataset(product, json, section, device, percentile)
             get_category_service(product, json).get_dataset section, device, percentile
+        end
+
+        def get_available_dataset(product, json, section, device, percentile)
+            get_category_service(product, json).get_available_dataset section, device, percentile
         end
 
         def get_unit_label(product, json, section)
