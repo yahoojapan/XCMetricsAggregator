@@ -1,5 +1,7 @@
 require 'etc'
 require 'json'
+require 'pathname'
+
 
 module XcMetricsAggregator
   PRODUCT_PATH = File.join('/', 'Users', Etc.getlogin, 'Library', 'Developer' , 'Xcode', 'Products')
@@ -74,7 +76,7 @@ module XcMetricsAggregator
 
     def structure(available_path)
       structure = XcMetricsAggregator::TableStructure.new
-      structure.title = @bundle_id
+      structure.title = "available app list"
       structure.headings = headings(available_path)
       structure.rows = rows(available_path)
       structure

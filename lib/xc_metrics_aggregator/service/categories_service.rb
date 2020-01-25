@@ -1,6 +1,6 @@
 require 'xc_metrics_aggregator/structure/structure'
 
-module XcMetricsAggregator::Metrics
+module XcMetricsAggregator
     class CategoriesService
         attr_reader :device_service
 
@@ -76,7 +76,7 @@ module XcMetricsAggregator::Metrics
 end 
 
 
-module XcMetricsAggregator::Metrics
+module XcMetricsAggregator
     class Category
         attr_accessor :sections, :display_name, :identifier
 

@@ -1,6 +1,6 @@
 require 'xc_metrics_aggregator/structure/structure'
 
-module XcMetricsAggregator::Metrics
+module XcMetricsAggregator
     class LatestService
         def initialize(section, deviceid, percentileid)
             target_datasets = {}
@@ -9,7 +9,7 @@ module XcMetricsAggregator::Metrics
                 product.try_to_open do |json| 
                     device = get_device(product, json, deviceid)
                     percentile = get_percentile(product, json, percentileid)
-                    
+
                     if device && percentile
                         dataset = get_dataset(product, json, section, device, percentile)
                     else

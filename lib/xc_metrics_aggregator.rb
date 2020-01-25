@@ -1,11 +1,11 @@
 require "xc_metrics_aggregator/version"
 require 'xc_metrics_aggregator/product'
 require 'xc_metrics_aggregator/crawler'
-require 'xc_metrics_aggregator/metrics/devices_service'
-require 'xc_metrics_aggregator/metrics/percentiles_service'
-require 'xc_metrics_aggregator/metrics/categories_service'
-require 'xc_metrics_aggregator/metrics/metrics_service'
-require 'xc_metrics_aggregator/metrics/latest_service'
+require 'xc_metrics_aggregator/service/devices_service'
+require 'xc_metrics_aggregator/service/percentiles_service'
+require 'xc_metrics_aggregator/service/categories_service'
+require 'xc_metrics_aggregator/service/metrics_service'
+require 'xc_metrics_aggregator/service/latest_service'
 require 'xc_metrics_aggregator/formatter/formatter'
 require 'xc_metrics_aggregator/formatter/output_format'
 require 'thor'
@@ -13,7 +13,6 @@ require 'ascii_charts'
 require 'pp'
 
 module XcMetricsAggregator
-  ROOT_DIR = File.expand_path("..", __dir__)
 
   class Error < StandardError; end
   class CLI < Thor
@@ -37,7 +36,7 @@ module XcMetricsAggregator
     def devices
       each_product do |product|
         product.try_to_open do |json| 
-          puts Metrics::DevicesService
+          puts DevicesService
             .new(product.bundle_id, json)
             .structure
             .format Formatter.get_formatter(format)
@@ -52,7 +51,7 @@ module XcMetricsAggregator
     def percentiles
       each_product do |product|
         product.try_to_open do |json| 
-          puts Metrics::PercentilesService
+          puts PercentilesService
             .new(product.bundle_id, json)
             .structure
             .format Formatter.get_formatter(format)
@@ -67,7 +66,7 @@ module XcMetricsAggregator
     desc "categories -b <bundle id> [-f <format>]", "Show available categories by builde id"
     def sections
       product.try_to_open do |json|
-        puts Metrics::CategoriesService
+        puts CategoriesService
           .new(product.bundle_id, json)
           .structure
           .format Formatter.get_formatter(format)
@@ -80,8 +79,9 @@ module XcMetricsAggregator
     desc "metrics -b <bundle id> -s <section> [-f <format>]", "Show metrics data to a builde id"
     def metrics
       product.try_to_open do |json| 
-        Metrics::MetricsService
-          .new(product.bundle_id, json).structures(options[:section])
+        MetricsService
+          .new(product.bundle_id, json)
+          .structures(options[:section])
           .each do |structure|
             puts structure.format Formatter.get_formatter(format)
             puts "------\n\n"
@@ -99,7 +99,7 @@ module XcMetricsAggregator
       percentileid = options[:percentile]
       section = options[:section]
 
-      puts Metrics::LatestService
+      puts LatestService
         .new(section, deviceid, percentileid)
         .structure
         .format Formatter.get_formatter(format)

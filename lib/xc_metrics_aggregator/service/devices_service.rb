@@ -1,6 +1,6 @@
 require 'xc_metrics_aggregator/structure/structure'
 
-module XcMetricsAggregator::Metrics
+module XcMetricsAggregator
     class Device
         attr_accessor :is_represented, :display_name, :identifier
 

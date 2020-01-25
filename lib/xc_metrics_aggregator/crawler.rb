@@ -1,6 +1,7 @@
 require 'open3'
 
 module XcMetricsAggregator
+    ROOT_DIR = File.expand_path("..", __dir__)
     APPLE_SCRIPT_EXECUTION = "osascript"
     APPLE_SCRIPT_FILE = "xcode_metrics_automation.applescript"
 

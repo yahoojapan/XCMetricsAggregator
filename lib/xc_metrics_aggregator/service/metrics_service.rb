@@ -1,7 +1,7 @@
-require 'xc_metrics_aggregator/metrics/categories_service'
+require 'xc_metrics_aggregator/service/categories_service'
 require 'xc_metrics_aggregator/structure/structure'
 
-module XcMetricsAggregator::Metrics
+module XcMetricsAggregator
     class MetricsService
         def initialize(bundle_id, json)
             @bundle_id = bundle_id
