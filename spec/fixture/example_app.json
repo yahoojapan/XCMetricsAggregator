@@ -48,7 +48,7 @@
                             }
                             ],
                             "filterCriteria": {
-                            "device": "all_iphones",
+                            "device": "iPhone6,1",
                             "percentile": "com.apple.dt.metrics.percentile.fifty"
                             }
                         }

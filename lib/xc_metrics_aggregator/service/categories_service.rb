@@ -24,7 +24,7 @@ module XcMetricsAggregator
 
         def get_dataset(section_name, device, percentile)
             section = categories.map { |category| category.sections.find { |section| section.display_name == section_name } }.first
-            section.datasets.find do |dataset| 
+            dataset = section.datasets.find do |dataset| 
                 dataset.filter_criteria.device == device.identifier \
                 && dataset.filter_criteria.percentile == percentile.identifier
             end

@@ -54,15 +54,15 @@ RSpec.describe "XCMetricsAggregator::ProductService" do
           ])
         end
 
-        it "makes a structure without path" do
+        it "makes a structure with path" do
             @service = XcMetricsAggregator::ProductsService.new
-            structure = @service.structure(false)
+            structure = @service.structure(true)
             expect(structure.title).to eq "available app list"
-            expect(structure.headings).to eq ['bundle id', 'status']
+            expect(structure.headings).to eq ['bundle id', 'status', 'raw data path']
             expect(structure.rows).to eq([
-              ['app.bundle_id.foo', 'fail to get metrics'], 
-              ['app.bundle_id.bar', 'fail to get metrics'],
-              ['app.bundle_id.foobar', 'fail to get metrics']
+              ['app.bundle_id.foo', 'fail to get metrics', '/foo/foo/app.bundle_id.foo/Metrics/AppStore/Metrics.xcmetricsdata'], 
+              ['app.bundle_id.bar', 'fail to get metrics', '/foo/foo/app.bundle_id.bar/Metrics/AppStore/Metrics.xcmetricsdata'],
+              ['app.bundle_id.foobar', 'fail to get metrics', '/foo/foo/app.bundle_id.foobar/Metrics/AppStore/Metrics.xcmetricsdata']
             ])
         end
     end
