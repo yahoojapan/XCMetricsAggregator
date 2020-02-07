@@ -1,7 +1,6 @@
 module XcMetricsAggregator
     module OutputFormat
         CSV = "csv"
-        HTML = "html"
         ASCII = "ascii"
 
         def self.all

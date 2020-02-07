@@ -9,8 +9,6 @@ module XcMetricsAggregator
             case format
             when OutputFormat::CSV
                 CSVFormatter.new
-            when OutputFormat::HTML
-                HTMLFormatter.new
             when OutputFormat::ASCII
                 ASCIIFormatter.new
             end
@@ -64,16 +62,29 @@ module XcMetricsAggregator
         end
 
         def format_chart(data)
-            
-        end
-    end
+            output = data.series.headings.join(',') + "\n"
 
-    class HTMLFormatter < Formatter
-        def format_table(data)
-        end
+            rows = data.series.rows.map do |line|
+                label = line.first
+                unless label
+                    next
+                end
 
-        def format_chart(data)
-            
+                sample = data.samples.find {|sample| sample.first == label }
+                unless sample
+                    next
+                end
+
+                line.append(sample.last)
+            end
+
+            output += rows.map do |row| 
+                row.map{ |e| e.to_s.include?(",") ? "\"#{e}\"" : e }
+                  .join(',')
+            end
+            .join("\n")
+            output += "\n"
+            output
         end
     end
 
