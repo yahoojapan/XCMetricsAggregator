@@ -12,6 +12,6 @@ module XcMetricsAggregator
     end
 
     class ChartStructure < Structure
-        attr_accessor :series, :samples, :unit
+        attr_accessor :series, :samples, :unit, :dscription
     end
 end

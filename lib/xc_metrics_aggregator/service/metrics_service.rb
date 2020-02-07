@@ -9,25 +9,34 @@ module XcMetricsAggregator
         end
 
         def structures(section_name)
-            structures = []
+            rows = []
+            samples = [] 
+            index = 0
             datasets(section_name).each do |dataset|
                 device = @category_service.device_service.get_device dataset.filter_criteria.device
-                structure = XcMetricsAggregator::ChartStructure.new
-                table_structure = XcMetricsAggregator::TableStructure.new
-                table_structure.rows = [["device", device.display_name], ["percentile", dataset.filter_criteria.percentile]]
-                table_structure.headings = []
-                table_structure.title = section_name
-                structure.series = table_structure
-                structure.unit = @category_service.get_section(section_name).unit.display_name
-                samples = dataset.points.map { |point| [point.version, point.summary] }
-                structure.samples = samples 
-                structures << structure
+                rows += dataset.points.map.with_index(index) { |p, i| [i, p.version, device.display_name, dataset.filter_criteria.percentile] }
+                samples += dataset.points.map.with_index(index) { |p, i| [i, p.summary] }
+                index += dataset.points.count
             end
-            structures
+
+            table_structure = XcMetricsAggregator::TableStructure.new
+            table_structure.headings = ["Label", "Version", "Device", "Percentile"]
+            table_structure.title = section_name
+            table_structure.rows = rows
+            structure = XcMetricsAggregator::ChartStructure.new
+            structure.series = table_structure
+            structure.unit = @category_service.get_section(section_name).unit.display_name
+            structure.samples = samples
+
+            structure
         end
 
         def datasets(section_name)
-            @category_service.get_section(section_name).datasets
+            section = @category_service.get_section(section_name)
+            unless section
+                raise StandardError.new("wrong section name")
+            end
+            section.datasets
         end
     end
 end

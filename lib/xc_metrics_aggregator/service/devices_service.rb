@@ -48,8 +48,12 @@ module XcMetricsAggregator
             if identifier.nil?
                 nil
             end
-
-            device = devicefamilies.map do |devicefamily| 
+            
+            device = devicefamilies.map do |devicefamily|
+                if devicefamily.identifier == identifier
+                    return devicefamily
+                end
+                
                 devicefamily.devices.select do |device|
                     device.identifier == identifier
                 end

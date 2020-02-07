@@ -79,13 +79,12 @@ module XcMetricsAggregator
     desc "metrics -b <bundle id> -s <section> [-f <format>]", "Show metrics data to a builde id"
     def metrics
       product.try_to_open do |json| 
-        MetricsService
+        structure = MetricsService
           .new(product.bundle_id, json)
           .structures(options[:section])
-          .each do |structure|
-            puts structure.format Formatter.get_formatter(format)
-            puts "------\n\n"
-          end
+        
+        puts structure.format Formatter.get_formatter(format)
+        puts "\n\n"
       end
     end
 
