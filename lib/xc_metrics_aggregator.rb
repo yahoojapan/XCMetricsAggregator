@@ -76,12 +76,15 @@ module XcMetricsAggregator
     option :section, :aliases => "-s", require: true
     option :bundle_id, :aliases => "-b", require: true
     option :format, :aliases => "-f", type: :string, default: "ascii"
-    desc "metrics -b <bundle id> -s <section> [-f <format>]", "Show metrics data to a builde id"
+    option :version, :aliases => "-v", require: false
+    option :device, :aliases => "-d", require: false
+    option :percentile, :aliases => "-p", require: false
+    desc "metrics -b <bundle id> -s <section> [-f <format>] [-d <device id>] [-p <percentile id>] [-v <version>]", "Show metrics data to a builde id"
     def metrics
       product.try_to_open do |json| 
         structure = MetricsService
           .new(product.bundle_id, json)
-          .structures(options[:section])
+          .structures(options[:section], options[:device], options[:percentile], options[:version])
         
         puts structure.format Formatter.get_formatter(format)
         puts "\n\n"

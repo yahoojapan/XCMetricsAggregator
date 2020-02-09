@@ -8,11 +8,21 @@ module XcMetricsAggregator
             @category_service = CategoriesService.new bundle_id, json
         end
 
-        def structures(section_name)
+        def structures(section_name, device_id, percentile_id, version)
             rows = []
             samples = [] 
             index = 0
             datasets(section_name).each do |dataset|
+                device_identifier =  dataset.filter_criteria.device
+                validated_device = !device_id || device_identifier == device_id
+                percentile_identifier =  dataset.filter_criteria.percentile
+                validated_percentile = !percentile_id || percentile_identifier == percentile_id
+
+                unless validated_device && validated_percentile
+                    next
+                end
+
+
                 device = @category_service.device_service.get_device dataset.filter_criteria.device
                 rows += dataset.points.map.with_index(index) { |p, i| [i, p.version, device.display_name, dataset.filter_criteria.percentile] }
                 samples += dataset.points.map.with_index(index) { |p, i| [i, p.summary] }
