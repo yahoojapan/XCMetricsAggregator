@@ -4,6 +4,10 @@
 
 XCMetricsAggregator aggregates metrics across all apps from [Xcode Metrics Organizer](https://help.apple.com/xcode/mac/current/#/devb642b28ac) by automating Xcode with AppleScript.
 
+You can check how to use Metrics Organizer in WWDC 2019 session below.
+
+- [Improving Battery Life and Performance - WWDC 2019](https://developer.apple.com/videos/play/wwdc2019/417/)
+
 ## Setup
 
 1. Install Xcode 11.x from App Store or the following link
