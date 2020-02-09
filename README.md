@@ -42,7 +42,7 @@ This command launches Xcode automatically, and operates the mouse.
 If you interrupt the crowling, input Ctrl + C on the terminal.
 
 
-### application lookup in metrics data
+### Application lookup in metrics data
 ```
 bundle exec exe/xcmagg apps
 ```
@@ -58,7 +58,7 @@ bundle exec exe/xcmagg apps
 +--------------------------------------------+---------------------+
 ```
 
-### available devices for your apps
+### Available devices for your apps
 ```
 bundle exec exe/xcmagg devices --b yourapp1,yourapp2
 ```
@@ -105,7 +105,7 @@ bundle exec exe/xcmagg devices --b yourapp1,yourapp2
 +--------------+---------------------------------------+------------+
 ```
 
-### available percentiles for your apps
+### Available percentiles for your apps
 ```
 bundle exec exe/xcmagg percentiles --b yourapp1,yourapp2
 ```
@@ -130,7 +130,7 @@ bundle exec exe/xcmagg percentiles --b yourapp1,yourapp2
 +----------------+--------------------------------------------+
 ```
 
-### launch time metrics for an app
+### Launch time metrics for an app
 ```
 bundle exec exe/xcmagg metrics -s launchTime -b yourapp1 -d iPhone11,6
 ```
