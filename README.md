@@ -198,7 +198,7 @@ Unit: ms
 
 ### make the latest data as CSV format
 ```
-xcmagg latest -s launchTime -d iPhone11,6 -p com.apple.dt.metrics.percentile.ninetyFive --f csv
+xcmagg latest -s launchTime -d iPhone11,6 -p com.apple.dt.metrics.percentile.ninetyFive -f csv
 ```
 
 ```
