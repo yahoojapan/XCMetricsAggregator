@@ -62,7 +62,8 @@ module XcMetricsAggregator
         end
 
         def format_chart(data)
-            output = data.series.headings.join(',') + "\n"
+            csv_head = data.series.headings + ["Point"]
+            output = csv_head.join(',') + "\n"
 
             rows = data.series.rows.map do |line|
                 label = line.first
