@@ -6,14 +6,12 @@ XCMetricsAggregator aggregates metrics across all apps from [Xcode Metrics Organ
 
 ## Setup
 
-1. Install Xcode from App Store
+1. Install Xcode 11 from App Store
 
-2. Add your Apple ID to Accounts preferences in Xcode
+2. Login with your Apple ID on Accounts preferences in Xcode
 
-3. Download this script
-```
-git clone https://github.com/yahoojapan/XCMetricsAggregator.git
-```
+3. check a privacy setting to use AppleScript
+
 
 ## Getting Started
 
