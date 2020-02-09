@@ -2,4 +2,4 @@
 
 cd `dirname $0`
 
-osascript xcode_metrics_automation.applescript
+bundle exec exe/xcmagg crowl

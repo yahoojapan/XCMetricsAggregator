@@ -1,0 +1,66 @@
+{
+    "lastUpdated": "2020-01-01T01:23:45.666Z",
+    "filterCriteriaSets": {
+        "defaultCriteria": {
+            "device": "all_iphones",
+            "percentile": "com.apple.dt.metrics.percentile.ninetyFive"
+        },
+        "deviceFamilies": [
+            {
+            "isRepresented": "true",
+            "devices": [
+                {
+                    "displayName": "iPhone 5s",
+                    "isRepresented": "false",
+                    "identifier": "iPhone6,1"
+                }
+            ],
+            "displayName": "iPhone (All)",
+            "identifier": "all_iphones"
+            }
+        ],
+        "percentiles": [
+            {
+                "displayName": "Typical",
+                "isRepresented": "true",
+                "identifier": "com.apple.dt.metrics.percentile.fifty"
+            },
+            {
+                "displayName": "Top Percentile",
+                "isRepresented": "true",
+                "identifier": "com.apple.dt.metrics.percentile.ninetyFive"
+            }
+        ]
+    },
+    "categories": [
+        {
+            "displayName": "performance",
+            "sections": [
+                {
+                    "displayName": "hangRate",
+                    "datasets": [
+                        {
+                            "points": [
+                            {
+                            "summary": 1.0,
+                            "version": "0.1.0",
+                            "percentageBreakdown": []
+                            }
+                            ],
+                            "filterCriteria": {
+                            "device": "iPhone6,1",
+                            "percentile": "com.apple.dt.metrics.percentile.fifty"
+                            }
+                        }
+                    ],
+                    "identifier": "hangRate",
+                    "unit": {
+                        "displayName": "seconds/hour",
+                        "identifier": "com.apple.dt.metrics.unit.hangTime"
+                    }
+                }  
+            ],
+            "identifier": "performance"
+        }
+    ]
+}
