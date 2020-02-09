@@ -39,6 +39,11 @@ There are 2 kinds of command.
 
 "crowl" command download the json files with Xcode, and the others process them.
 
+### Available feature List
+```
+xcmagg help
+```
+
 ### Downloading metrics data 
 ```
 xcmagg crowl
@@ -137,6 +142,30 @@ xcmagg percentiles --b yourapp1,yourapp2
 +----------------+--------------------------------------------+
 ```
 
+### Checking available metricses
+
+```
+xcmagg sections -b yourapp1
+```
+
+```
++--------------+---------------+--------------+
+|                  yourapp1                   |
++--------------+---------------+--------------+
+| category     | section       | unit         |
++--------------+---------------+--------------+
+| performance  | hangRate      | seconds/hour |
+|              | launchTime    | ms           |
+|              | peakMemory    | MB           |
+|              | averageMemory | MB           |
+| diskUsage    | diskWrites    | MB           |
+| batteryUsage | allActivity   | seconds      |
+|              | batteryUsage  | %/day        |
+|              | onScreen      | %            |
+|              | background    | %            |
++--------------+---------------+--------------+
+```
+
 ### Launch time metrics for an app
 ```
 xcmagg metrics -s launchTime -b yourapp1 -d iPhone11,6
@@ -169,7 +198,7 @@ Unit: ms
 ```
 
 
-### Compare LaunchTime between your apps
+### Comparison of LaunchTime between your apps
 ```
 xcmagg latest -s launchTime -d iPhone11,6 -p com.apple.dt.metrics.percentile.ninetyFive
 ```
@@ -196,7 +225,7 @@ Unit: ms
 
 ```
 
-### make the latest data as CSV format
+### Outputting the latest LaunchTime as CSV format
 ```
 xcmagg latest -s launchTime -d iPhone11,6 -p com.apple.dt.metrics.percentile.ninetyFive -f csv
 ```
