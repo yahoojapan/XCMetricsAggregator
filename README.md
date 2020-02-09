@@ -3,6 +3,7 @@
 ## What's this?
 
 XCMetricsAggregator aggregates metrics data from [Xcode Metrics Organizer](https://help.apple.com/xcode/mac/current/#/devb642b28ac) with AppleScript. 
+
 It also processes the raw data on your mac device to show the organized tables and charts.
 
 You can check how to use Xcode Metrics Organizer in WWDC 2019 session below.
