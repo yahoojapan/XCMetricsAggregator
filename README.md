@@ -39,7 +39,7 @@ bundle exec exe/xcmagg crowl
 
 This command launches Xcode automatically, and operates the mouse. 
 
-If you interupt the crowling, input Ctrl + C on the terminal.
+If you interrupt the crowling, input Ctrl + C on the terminal.
 
 
 ### application lookup in metrics data
