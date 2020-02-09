@@ -24,6 +24,12 @@ https://developer.apple.com/download/more/
 
 <img width="400" alt="Screen Shot 0002-02-09 at 19 28 25" src="https://user-images.githubusercontent.com/18320004/74100455-789afe80-4b72-11ea-9cef-4ea1704edeac.png">
 
+4. Install XCMetricsAggregator
+
+```
+gem install xc_metrics_aggregator
+```
+
 
 ## Getting Started
 There are 2 kinds of command.
@@ -35,7 +41,7 @@ There are 2 kinds of command.
 
 ### Downloading metrics data 
 ```
-bundle exec exe/xcmagg crowl
+xcmagg crowl
 ```
 
 This command launches Xcode automatically, and operates the mouse. 
@@ -45,7 +51,7 @@ If you interrupt the crowling, input Ctrl + C on the terminal.
 
 ### Application lookup in metrics data
 ```
-bundle exec exe/xcmagg apps
+xcmagg apps
 ```
 
 ```
@@ -61,7 +67,7 @@ bundle exec exe/xcmagg apps
 
 ### Available devices for your apps
 ```
-bundle exec exe/xcmagg devices --b yourapp1,yourapp2
+xcmagg devices --b yourapp1,yourapp2
 ```
 
 ```
@@ -108,7 +114,7 @@ bundle exec exe/xcmagg devices --b yourapp1,yourapp2
 
 ### Available percentiles for your apps
 ```
-bundle exec exe/xcmagg percentiles --b yourapp1,yourapp2
+xcmagg percentiles --b yourapp1,yourapp2
 ```
 
 ```
@@ -133,7 +139,7 @@ bundle exec exe/xcmagg percentiles --b yourapp1,yourapp2
 
 ### Launch time metrics for an app
 ```
-bundle exec exe/xcmagg metrics -s launchTime -b yourapp1 -d iPhone11,6
+xcmagg metrics -s launchTime -b yourapp1 -d iPhone11,6
 ```
 
 ```
@@ -165,7 +171,7 @@ Unit: ms
 
 ### Compare launch times between your apps
 ```
-bundle exec exe/xcmagg latest -s launchTime -d iPhone11,6 -p com.apple.dt.metrics.percentile.ninetyFive
+xcmagg latest -s launchTime -d iPhone11,6 -p com.apple.dt.metrics.percentile.ninetyFive
 ```
 
 ```
@@ -192,7 +198,7 @@ Unit: ms
 
 ### Send the metrics to your log server with CSV format
 ```
-bundle exec exe/xcmagg latest -s launchTime -d iPhone11,6 -p com.apple.dt.metrics.percentile.ninetyFive --f csv
+xcmagg latest -s launchTime -d iPhone11,6 -p com.apple.dt.metrics.percentile.ninetyFive --f csv
 ```
 
 ```
