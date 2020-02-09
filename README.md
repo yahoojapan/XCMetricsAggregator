@@ -22,7 +22,9 @@ https://developer.apple.com/download/more/
 
 3. check Accessibility setting in Security & Privacy. Script Editor, System Events and Terminal needs to be checked.
 
-<img width="400" alt="Screen Shot 0002-02-09 at 19 28 25" src="https://user-images.githubusercontent.com/18320004/74100455-789afe80-4b72-11ea-9cef-4ea1704edeac.png">
+<img width="400" alt="Screen Shot 0002-02-10 at 0 34 47" src="https://user-images.githubusercontent.com/18320004/74105018-8c0f8f00-4b9d-11ea-9008-c1f166876b4a.png">
+
+
 
 4. Install XCMetricsAggregator
 
