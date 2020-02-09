@@ -21,10 +21,9 @@ module XcMetricsAggregator
                 unless validated_device && validated_percentile
                     next
                 end
-
-
+                percentile = @category_service.percentile_service.get_percentile dataset.filter_criteria.percentile
                 device = @category_service.device_service.get_device dataset.filter_criteria.device
-                rows += dataset.points.map.with_index(index) { |p, i| [i, p.version, device.display_name, dataset.filter_criteria.percentile] }
+                rows += dataset.points.map.with_index(index) { |p, i| [i, p.version, device.display_name, percentile.display_name] }
                 samples += dataset.points.map.with_index(index) { |p, i| [i, p.summary] }
                 index += dataset.points.count
             end

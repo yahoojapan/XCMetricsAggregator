@@ -43,8 +43,9 @@ module XcMetricsAggregator
                 nil
             end
 
-            percentiles.find do |percentile| 
-                percentile.identifier = identifier
+
+            res = percentiles.find do |percentile| 
+                percentile.identifier == identifier
             end
         end
     end

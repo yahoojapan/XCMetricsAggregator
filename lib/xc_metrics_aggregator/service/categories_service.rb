@@ -2,12 +2,13 @@ require 'xc_metrics_aggregator/structure/structure'
 
 module XcMetricsAggregator
     class CategoriesService
-        attr_reader :device_service
+        attr_reader :device_service, :percentile_service
 
         def initialize(bundle_id, json)
             @json = json
             @bundle_id = bundle_id
             @device_service = DevicesService.new bundle_id, json
+            @percentile_service = PercentilesService.new bundle_id, json
         end
 
         def structure

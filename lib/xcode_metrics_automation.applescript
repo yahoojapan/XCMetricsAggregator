@@ -71,7 +71,7 @@ script TableRowsClicker
 					set pos to position of row_elem
 					my clickAt(item 1 of pos, item 2 of pos)
 					
-					my waitForDownloading()
+					--my waitForDownloading()
 				end repeat
 				
 			end tell
