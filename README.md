@@ -169,7 +169,7 @@ Unit: ms
 ```
 
 
-### Compare launch times between your apps
+### Compare LaunchTime between your apps
 ```
 xcmagg latest -s launchTime -d iPhone11,6 -p com.apple.dt.metrics.percentile.ninetyFive
 ```
@@ -196,7 +196,7 @@ Unit: ms
 
 ```
 
-### Send the metrics to your log server with CSV format
+### make the latest data as CSV format
 ```
 xcmagg latest -s launchTime -d iPhone11,6 -p com.apple.dt.metrics.percentile.ninetyFive --f csv
 ```
@@ -206,6 +206,8 @@ Label,Bundle ID,Version,Point
 0,yourapp1,2.0.0,698
 1,yourapp2,1.1.0,300
 ```
+
+You can send it to your log server
 
 ## Run with Launchd to see changes over time
 
