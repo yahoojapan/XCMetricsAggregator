@@ -2,9 +2,10 @@
 
 ## What's this?
 
-XCMetricsAggregator aggregates metrics across all apps from [Xcode Metrics Organizer](https://help.apple.com/xcode/mac/current/#/devb642b28ac) by automating Xcode with AppleScript.
+XCMetricsAggregator aggregates metrics data from [Xcode Metrics Organizer](https://help.apple.com/xcode/mac/current/#/devb642b28ac) with AppleScript. 
+It also processes the raw data on your mac device to show the organized tables and charts.
 
-You can check how to use Metrics Organizer in WWDC 2019 session below.
+You can check how to use Xcode Metrics Organizer in WWDC 2019 session below.
 
 - [Improving Battery Life and Performance - WWDC 2019](https://developer.apple.com/videos/play/wwdc2019/417/)
 
