@@ -41,6 +41,8 @@ There are 2 kinds of command.
 
 "crowl" command download the json files with Xcode, and the others process them.
 
+First of all, You need to download Xcode Metrics Organizer's raw data on your mac with 'crowl' command.
+
 ### Available feature List
 ```
 xcmagg help
