@@ -15,7 +15,7 @@ GEM
       numerizer (~> 0.1.1)
     etc (1.1.0)
     numerizer (0.1.1)
-    rake (10.5.0)
+    rake (13.0.1)
     spec (5.3.4)
       chronic_duration (~> 0.10.2)
     terminal-table (1.8.0)
@@ -28,7 +28,7 @@ PLATFORMS
 
 DEPENDENCIES
   bundler (~> 2.0)
-  rake (~> 10.0)
+  rake (~> 13.0)
   spec
   xc_metrics_aggregator!
 
