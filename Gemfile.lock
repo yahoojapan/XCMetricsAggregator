@@ -20,7 +20,7 @@ GEM
       chronic_duration (~> 0.10.2)
     terminal-table (1.8.0)
       unicode-display_width (~> 1.1, >= 1.1.1)
-    thor (1.0.1)
+    thor (1.4.0)
     unicode-display_width (1.6.1)
 
 PLATFORMS
